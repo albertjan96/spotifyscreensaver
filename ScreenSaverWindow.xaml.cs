@@ -11,6 +11,8 @@ using System.Windows.Threading;
 
 using WinForms = System.Windows.Forms;
 using WpfPoint = System.Windows.Point;
+using WpfKeyEventArgs = System.Windows.Input.KeyEventArgs;
+using WpfMouseButtonEventArgs = System.Windows.Input.MouseButtonEventArgs;
 
 namespace SpotifyScreenSaver;
 
@@ -115,13 +117,13 @@ public partial class ScreenSaverWindow : Window
         };
     }
 
-    private void OnKeyDown(object sender, KeyEventArgs e)
+    private void OnKeyDown(object sender, WpfKeyEventArgs e)
     {
         if (!_isClosing)
             Close();
     }
 
-    private void OnMouseDown(object sender, MouseButtonEventArgs e)
+    private void OnMouseDown(object sender, WpfMouseButtonEventArgs e)
     {
         if (!_isClosing)
             Close();
