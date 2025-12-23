@@ -38,13 +38,14 @@ public partial class ScreenSaverWindow : Window
     
     private CancellationTokenSource? _cancellationTokenSource;
     private bool _isTickRunning;
+    private bool _isClosing;
 
     public ScreenSaverWindow()
     {
         InitializeComponent();
 
-        KeyDown += (_, __) => Close();
-        MouseDown += (_, __) => Close();
+        KeyDown += OnKeyDown;
+        MouseDown += OnMouseDown;
         MouseMove += OnMouseMoveExitLogic;
 
         Loaded += async (_, __) =>
@@ -85,22 +86,45 @@ public partial class ScreenSaverWindow : Window
             await TickAsync();
         };
 
-        Closed += (_, __) =>
+        Closing += (_, __) =>
         {
+            if (_isClosing) return;
+            _isClosing = true;
+            
             _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource?.Dispose();
             
             _timer.Stop();
             _progressTimer.Stop();
+            _clockTimer.Stop();
             
             foreach (var w in _blackouts)
             {
-                try { w.Close(); } catch { }
+                try 
+                { 
+                    w.Hide();
+                    w.Close(); 
+                } 
+                catch { }
             }
             _blackouts.Clear();
-
-            _clockTimer.Stop();
         };
+
+        Closed += (_, __) =>
+        {
+            _cancellationTokenSource?.Dispose();
+        };
+    }
+
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+        if (!_isClosing)
+            Close();
+    }
+
+    private void OnMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (!_isClosing)
+            Close();
     }
 
     private void OnTimerTick(object? sender, EventArgs e)
@@ -153,6 +177,8 @@ public partial class ScreenSaverWindow : Window
 
     private void OnMouseMoveExitLogic(object sender, System.Windows.Input.MouseEventArgs e)
     {
+        if (_isClosing) return;
+        
         var pos = e.GetPosition(this);
         if (_firstMousePos is null)
         {
@@ -212,7 +238,7 @@ public partial class ScreenSaverWindow : Window
 
     private async Task TickAsync()
     {
-        if (_tokens is null || _isTickRunning || _auth is null) return;
+        if (_tokens is null || _isTickRunning || _auth is null || _isClosing) return;
 
         _isTickRunning = true;
         
