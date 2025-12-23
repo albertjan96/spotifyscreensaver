@@ -12,10 +12,11 @@ Write-Host ""
 Write-Host "?? Cleaning previous builds..." -ForegroundColor Yellow
 dotnet clean --configuration Release --verbosity quiet
 if (Test-Path "release") { Remove-Item -Recurse -Force "release" }
+if (Test-Path "*.zip") { Remove-Item -Force "*.zip" }
 
 # Build Release
 Write-Host "?? Building Release configuration..." -ForegroundColor Yellow
-dotnet build --configuration Release --verbosity quiet
+dotnet build Scr.sln --configuration Release --verbosity quiet
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "? Build failed!" -ForegroundColor Red
@@ -35,13 +36,17 @@ Write-Host "?? Creating release package v$FullVersion..." -ForegroundColor Yello
 # Create release folder
 New-Item -ItemType Directory -Force -Path "release" | Out-Null
 
-# Copy screensaver file
+# Copy screensaver file from build output
 $scrPath = "bin\Release\net8.0-windows\SpotifyNowPlayingScreensaver.scr"
 if (Test-Path $scrPath) {
     Copy-Item $scrPath "release\"
     Write-Host "  ? Copied SpotifyNowPlayingScreensaver.scr" -ForegroundColor Green
 } else {
-    Write-Host "  ? Screensaver file not found!" -ForegroundColor Red
+    Write-Host "  ? Screensaver file not found at: $scrPath" -ForegroundColor Red
+    Write-Host "  Looking for .scr files in bin\Release..." -ForegroundColor Yellow
+    Get-ChildItem -Path "bin\Release\" -Recurse -Filter "*.scr" | ForEach-Object { 
+        Write-Host "    Found: $($_.FullName)" -ForegroundColor Yellow
+    }
     exit 1
 }
 
@@ -76,7 +81,9 @@ Write-Host "?? ZIP file: $zipName ($([math]::Round($zipSize, 1)) KB)" -Foregroun
 Write-Host "?? Release folder: .\release\" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "?? Next steps:" -ForegroundColor Yellow
-Write-Host "  1. Test the .scr file from the release folder"
-Write-Host "  2. Create a GitHub release: gh release create v$FullVersion $zipName --title 'v$FullVersion'"
+Write-Host "  1. Test the .scr file: .\release\SpotifyNowPlayingScreensaver.scr /s"
+Write-Host "  2. Create a GitHub release:"
+Write-Host "     git tag v$FullVersion"
+Write-Host "     git push origin v$FullVersion"
 Write-Host "  3. Or upload manually to: https://github.com/albertjan96/spotifyscreensaver/releases/new"
 Write-Host ""
