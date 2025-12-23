@@ -1,4 +1,4 @@
-﻿name: Build Release
+name: Build Release
 
 on:
   push:
@@ -21,16 +21,11 @@ jobs:
       with:
         dotnet-version: 8.0.x
     
-    - name: Configure NuGet
-      run: |
-        dotnet nuget list source
-        dotnet nuget add source https://api.nuget.org/v3/index.json --name nuget.org || echo "Source already exists"
-    
     - name: Restore dependencies
-      run: dotnet restore Scr.sln --source https://api.nuget.org/v3/index.json
+      run: dotnet restore SpotifyNowPlayingScreensaver.csproj
     
     - name: Build Release
-      run: dotnet build Scr.sln --configuration Release --no-restore
+      run: dotnet build SpotifyNowPlayingScreensaver.csproj --configuration Release --no-restore
     
     - name: Publish Self-Contained
       run: |
@@ -53,24 +48,24 @@ jobs:
       run: |
         New-Item -ItemType Directory -Force -Path release
         
-        # For self-contained build, the .exe from publish folder is the complete application
-        # Rename it to .scr
         $exePath = "publish\SpotifyNowPlayingScreensaver.exe"
         
         if (Test-Path $exePath) {
           Copy-Item $exePath "release\SpotifyNowPlayingScreensaver.scr"
-          Write-Host "✅ Created .scr file from self-contained executable"
+          Write-Host "Created .scr file from self-contained executable"
           
           $fileSize = (Get-Item "release\SpotifyNowPlayingScreensaver.scr").Length / 1MB
-          Write-Host "📦 File size: $([math]::Round($fileSize, 2)) MB"
+          Write-Host "File size: $([math]::Round($fileSize, 2)) MB"
         } else {
-          Write-Host "❌ Published executable not found at: $exePath"
+          Write-Host "Published executable not found at: $exePath"
           Get-ChildItem -Path "publish\" -Recurse | ForEach-Object { Write-Host $_.FullName }
           exit 1
         }
         
         Copy-Item "README.md" "release\"
-        Copy-Item "LICENSE" "release\" -ErrorAction SilentlyContinue
+        if (Test-Path "LICENSE") {
+          Copy-Item "LICENSE" "release\"
+        }
         
         Compress-Archive -Path release\* -DestinationPath "SpotifyNowPlayingScreensaver-v${{ steps.version.outputs.VERSION }}.zip"
     
@@ -90,27 +85,28 @@ jobs:
           SpotifyNowPlayingScreensaver-v${{ steps.version.outputs.VERSION }}.zip
           release/SpotifyNowPlayingScreensaver.scr
         body: |
-          ## 🎵 Spotify Now Playing Screensaver v${{ steps.version.outputs.VERSION }}
+          ## Spotify Now Playing Screensaver v${{ steps.version.outputs.VERSION }}
           
           **AI-Generated Project** - Developed entirely with GitHub Copilot assistance.
           
-          ### 📥 Installation
-          1. Download `SpotifyNowPlayingScreensaver.zip` (~60 MB)
-          2. Right-click → "Install" or copy to `C:\Windows\System32\`
+          ### Installation
+          1. Download `SpotifyNowPlayingScreensaver.scr`
+          2. Right-click > "Install" or copy to `C:\Windows\System32\`
           3. Configure via Windows Screen Saver settings
+          4. Run configuration (/c) to login with Spotify
           
-          ### ✨ Features
+          ### Features
           - Real-time Spotify track display
           - Album artwork & playback time
-          - Next track preview
+          - Intelligent API polling (reduces API calls)
           - Multi-monitor support
           - Self-contained (no .NET installation required!)
           
-          ### 📋 Requirements
+          ### Requirements
           - Windows 10/11 (64-bit)
-          - Spotify Developer App (see README for setup)
+          - Spotify Developer App credentials (see README)
           
-          ### 🆕 What's New
+          ### What's New
           - Self-contained build - no .NET runtime needed
           - Single file distribution
           - See commit history for details

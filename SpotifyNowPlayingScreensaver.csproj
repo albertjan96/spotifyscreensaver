@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include=".github\workflows\release.yml" />
+    <None Include=".github\workflows\release-fixed.yml" />
   </ItemGroup>
 
   <!-- Debug Configuration -->
