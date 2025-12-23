@@ -1,5 +1,12 @@
 ﻿# Spotify Now Playing Screensaver
 
+![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=flat-square&logo=dotnet)
+![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?style=flat-square&logo=windows)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+![AI Generated](https://img.shields.io/badge/Generated%20by-GitHub%20Copilot-8957E5?style=flat-square&logo=github)
+![C#](https://img.shields.io/badge/Language-C%23-239120?style=flat-square&logo=csharp)
+![WPF](https://img.shields.io/badge/UI-WPF-5C2D91?style=flat-square)
+
 > **IMPORTANT DISCLAIMER**  
 > **This project was ENTIRELY developed using GitHub Copilot AI assistance.**  
 > Every aspect of this codebase - from initial architecture to final implementation - was generated, guided, or significantly influenced by artificial intelligence. The human developer's role was primarily limited to:
