@@ -1,4 +1,4 @@
-name: Build Release
+﻿name: Build Release
 
 on:
   push:
@@ -59,12 +59,12 @@ jobs:
         
         if (Test-Path $exePath) {
           Copy-Item $exePath "release\SpotifyNowPlayingScreensaver.scr"
-          Write-Host "? Created .scr file from self-contained executable"
+          Write-Host "✅ Created .scr file from self-contained executable"
           
           $fileSize = (Get-Item "release\SpotifyNowPlayingScreensaver.scr").Length / 1MB
-          Write-Host "?? File size: $([math]::Round($fileSize, 2)) MB"
+          Write-Host "📦 File size: $([math]::Round($fileSize, 2)) MB"
         } else {
-          Write-Host "? Published executable not found at: $exePath"
+          Write-Host "❌ Published executable not found at: $exePath"
           Get-ChildItem -Path "publish\" -Recurse | ForEach-Object { Write-Host $_.FullName }
           exit 1
         }
@@ -90,27 +90,27 @@ jobs:
           SpotifyNowPlayingScreensaver-v${{ steps.version.outputs.VERSION }}.zip
           release/SpotifyNowPlayingScreensaver.scr
         body: |
-          ## ?? Spotify Now Playing Screensaver v${{ steps.version.outputs.VERSION }}
+          ## 🎵 Spotify Now Playing Screensaver v${{ steps.version.outputs.VERSION }}
           
           **AI-Generated Project** - Developed entirely with GitHub Copilot assistance.
           
-          ### ?? Installation
-          1. Download `SpotifyNowPlayingScreensaver.scr` (~60 MB)
-          2. Right-click ? "Install" or copy to `C:\Windows\System32\`
+          ### 📥 Installation
+          1. Download `SpotifyNowPlayingScreensaver.zip` (~60 MB)
+          2. Right-click → "Install" or copy to `C:\Windows\System32\`
           3. Configure via Windows Screen Saver settings
           
-          ### ? Features
+          ### ✨ Features
           - Real-time Spotify track display
           - Album artwork & playback time
           - Next track preview
           - Multi-monitor support
           - Self-contained (no .NET installation required!)
           
-          ### ?? Requirements
+          ### 📋 Requirements
           - Windows 10/11 (64-bit)
           - Spotify Developer App (see README for setup)
           
-          ### ?? What's New
+          ### 🆕 What's New
           - Self-contained build - no .NET runtime needed
           - Single file distribution
           - See commit history for details
