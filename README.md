@@ -22,7 +22,7 @@
 
 A Windows screensaver that displays your currently playing Spotify track with album art, artist name, and playback time.
 
-![Screenshot](screenshot.png)
+![Screenshjot](screenshot.png)
 
 ## Features
 
