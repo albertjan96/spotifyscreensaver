@@ -49,9 +49,11 @@ A Windows screensaver that displays your currently playing Spotify track with al
 ### Download Pre-built Release
 
 1. Go to [Releases](https://github.com/albertjan96/spotifyscreensaver/releases)
-2. Download the latest `SpotifyNowPlayingScreensaver.scr`
+2. Download the latest `SpotifyNowPlayingScreensaver.scr` (~60 MB self-contained)
 3. Right-click the file → "Install" 
 4. Or manually copy to `C:\Windows\System32\`
+
+**Note:** The screensaver is self-contained and includes the .NET 8 runtime. No separate .NET installation required!
 
 ### Build from Source
 
