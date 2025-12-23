@@ -1,0 +1,10 @@
+[33m5b6080e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m remove emoji
+[33me4e4d2d[m Update README to highlight AI-generated development
+[33m38e4db8[m Update README: English translation & feature highlights
+[33m5fb880b[m Enhance UI with Spotify logo, async art loading, and cleanup
+[33me116e13[m Add screensaver preview mode and build/version automation
+[33md4e990b[m Update .gitignore and remove Spotify client ID example
+[33m8831d01[m Add "Next Track" display to screensaver window
+[33mf411703[m Rename Screenshot.png to screenshot.png
+[33md46de7f[m Add Screenshot.png image to project
+[33m2053b23[m Add post-build step to create .scr screensaver file

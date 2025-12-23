@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<UseWindowsForms>true</UseWindowsForms>
+
+    <!-- Nice for screensavers -->
+	  <UseAppHost>true</UseAppHost> 
+    <AssemblyName>SpotifyNowPlayingScreensaver</AssemblyName>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+	<Configurations>Debug;Release;Staging</Configurations>
+	
+	<!-- Version Info -->
+	<VersionMajor>1</VersionMajor>
+	<VersionMinor>0</VersionMinor>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\**\*" />
+  </ItemGroup>
+
+  <!-- Debug Configuration -->
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <!-- Release Configuration -->
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <!-- Staging Configuration (voorbeeld) -->
+  <PropertyGroup Condition="'$(Configuration)'=='Staging'">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>true</Optimize>
+    <DefineConstants>STAGING</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Pre-build: Increment version number -->
+  <Target Name="IncrementVersion" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <VersionFile>$(MSBuildProjectDirectory)\version.txt</VersionFile>
+    </PropertyGroup>
+    
+    <!-- Read current build number -->
+    <ReadLinesFromFile File="$(VersionFile)">
+      <Output TaskParameter="Lines" PropertyName="BuildNumber" />
+    </ReadLinesFromFile>
+    
+    <!-- Increment build number -->
+    <PropertyGroup>
+      <NewBuildNumber>$([MSBuild]::Add($(BuildNumber), 1))</NewBuildNumber>
+      <Version>$(VersionMajor).$(VersionMinor).$(NewBuildNumber)</Version>
+      <FileVersion>$(Version)</FileVersion>
+      <AssemblyVersion>$(Version)</AssemblyVersion>
+    </PropertyGroup>
+    
+    <!-- Write new build number back to file -->
+    <WriteLinesToFile File="$(VersionFile)" Lines="$(NewBuildNumber)" Overwrite="true" />
+    
+    <Message Text="Version incremented to $(Version)" Importance="high" />
+  </Target>
+
+  <!-- Post-build event: Copy .exe to .scr with version and build type -->
+  <Target Name="CopyToScreensaver" AfterTargets="Build">
+    <PropertyGroup>
+      <ScreensaverFileName>$(AssemblyName)-$(Configuration).scr</ScreensaverFileName>
+      <ScreensaverPath>$(TargetDir)$(ScreensaverFileName)</ScreensaverPath>
+      <ExePath>$(TargetDir)$(AssemblyName).exe</ExePath>
+    </PropertyGroup>
+    <Copy SourceFiles="$(ExePath)" DestinationFiles="$(TargetDir)$(AssemblyName).scr" />
+    <Copy SourceFiles="$(ExePath)" DestinationFiles="$(ScreensaverPath)" />
+    <Message Text="Created screensaver: $(TargetDir)$(AssemblyName).scr" Importance="high" />
+    <Message Text="Created screensaver: $(ScreensaverPath)" Importance="high" />
+  </Target>
+
+</Project>

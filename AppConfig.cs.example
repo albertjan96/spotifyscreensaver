@@ -1,0 +1,13 @@
+namespace SpotifyScreenSaver;
+
+public static class AppConfig
+{
+    // TODO: Fill in your Client ID from Spotify Developer Dashboard
+    public const string SpotifyClientId = "YOUR_CLIENT_ID_HERE";
+
+    // MUST be exactly the same as in Spotify Developer Dashboard -> Redirect URIs
+    public const string RedirectUri = "http://127.0.0.1:5543/callback";
+
+    // HttpListener prefixes must end with /
+    public const string ListenerPrefix = "http://127.0.0.1:5543/callback/";
+}
