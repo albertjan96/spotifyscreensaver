@@ -46,6 +46,23 @@ A Windows screensaver that displays your currently playing Spotify track with al
 
 ## Installation
 
+### Download Pre-built Release
+
+1. Go to [Releases](https://github.com/albertjan96/spotifyscreensaver/releases)
+2. Download the latest `SpotifyNowPlayingScreensaver.scr`
+3. Right-click the file → "Install" 
+4. Or manually copy to `C:\Windows\System32\`
+
+### Build from Source
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/albertjan96/spotifyscreensaver.git
+   cd spotifyscreensaver
+   ```
+
+2. Build and install the screensaver (see next section)
+
 ### 1. Create Spotify Developer App
 
 1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
@@ -59,27 +76,6 @@ A Windows screensaver that displays your currently playing Spotify track with al
 5. Accept the terms and click "Save"
 6. Copy your **Client ID**
 
-### 2. Configure Project
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/albertjan96/spotifyscreensaver.git
-   cd spotifyscreensaver
-   ```
-
-2. Open `AppConfig.cs` and fill in your Client ID:
-   ```csharp
-   public const string SpotifyClientId = "YOUR_CLIENT_ID_HERE";
-   ```
-
-### 3. Build and Install
-
-1. Open the project in Visual Studio 2022
-2. Build the project (Release mode recommended)
-3. The `.scr` file is automatically created with version number
-4. Copy the `.scr` file to `C:\Windows\System32\`
-5. Or: right-click on the `.scr` file and select "Install"
-
 ## Usage
 
 ### First Time Setup
@@ -87,10 +83,11 @@ A Windows screensaver that displays your currently playing Spotify track with al
 1. Right-click on Desktop, select Personalize, then Lock screen, then Screen saver
 2. Select "Spotify Now Playing Screensaver"
 3. Click on "Settings"
-4. Click on "Login with Spotify"
-5. Your browser will automatically open for Spotify authentication
-6. Log in and grant permission
-7. Close the configuration window
+4. **Enter your Spotify Client ID** (from step 1 above) and click "Save"
+5. Click on "Login with Spotify"
+6. Your browser will automatically open for Spotify authentication
+7. Log in and grant permission
+8. Close the configuration window
 
 ### Testing the Screensaver
 
@@ -106,23 +103,14 @@ If you have issues logging in:
 
 ## Configuration
 
-### AppConfig.cs Options
+The screensaver stores configuration in `%APPDATA%\SpotifyNowPlayingScreensaver\`:
+- **Client ID** - Your Spotify application Client ID (entered in config window)
+- **Tokens** - Encrypted OAuth tokens (automatically managed)
 
-```csharp
-public const string SpotifyClientId = "...";           // Your Spotify Client ID
-public const string RedirectUri = "http://127.0.0.1:5543/callback";  // Must match Developer Dashboard
-public const string ListenerPrefix = "http://127.0.0.1:5543/callback/"; // For OAuth callback
-```
+### Required Spotify App Settings
 
-### Polling Frequency
-
-The screensaver automatically adjusts API polling:
-- **New track**: Every 3 seconds
-- **During playback**: Every 10 seconds
-- **Last 2 seconds**: Every 2 seconds
-- **Nothing playing**: Every 5 seconds
-- **Time display**: Updates every second (without API call)
-- **HTTP timeout**: 10 seconds per request
+In your Spotify Developer Dashboard, configure:
+- **Redirect URI**: `http://127.0.0.1:5543/callback` (must match exactly)
 
 ## Technical Details
 
