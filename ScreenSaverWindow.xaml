@@ -62,7 +62,7 @@
 				<StackPanel x:Name="NextTrackPanel"
 							Margin="0,30,0,0"
 							Visibility="Collapsed">
-					<TextBlock Text="Volgende:"
+					<TextBlock Text="Next up:"
 							   FontSize="20"
 							   Foreground="White"
 							   Opacity="0.6"/>

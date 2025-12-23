@@ -86,7 +86,7 @@ public sealed class SpotifyAuth
             ["client_id"] = _clientId,
             ["grant_type"] = "authorization_code",
             ["code"] = code,
-            ["redirect_uri"] = _redirectUri,   // EXACT dezelfde als authorize + dashboard
+            ["redirect_uri"] = _redirectUri,   // MUST be exactly the same as authorize + dashboard
             ["code_verifier"] = verifier,
         };
 

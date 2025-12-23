@@ -153,7 +153,7 @@ public partial class ScreenSaverWindow : Window
         var dx = Math.Abs(pos.X - _firstMousePos.Value.X);
         var dy = Math.Abs(pos.Y - _firstMousePos.Value.Y);
 
-        if (dx > 12 || dy > 12)
+        if (dx > 5 || dy > 5)
             Close();
     }
 
@@ -192,7 +192,7 @@ public partial class ScreenSaverWindow : Window
         var elapsed = FormatTime(estimatedProgress);
         var remaining = FormatTime(_currentDurationMs - estimatedProgress);
         var total = FormatTime(_currentDurationMs);
-        TimeText.Text = $"{elapsed} / {total} (nog {remaining})";
+        TimeText.Text = $"{elapsed} / {total} ({remaining} left)";
 
         if (estimatedProgress >= _currentDurationMs - 2000)
         {
@@ -270,7 +270,7 @@ public partial class ScreenSaverWindow : Window
             var elapsed = FormatTime(data.ProgressMs);
             var remaining = FormatTime(data.DurationMs - data.ProgressMs);
             var total = FormatTime(data.DurationMs);
-            TimeText.Text = $"{elapsed} / {total} (nog {remaining})";
+            TimeText.Text = $"{elapsed} / {total} ({remaining} left)";
 
             if (!string.IsNullOrWhiteSpace(data.AlbumArtUrl))
             {

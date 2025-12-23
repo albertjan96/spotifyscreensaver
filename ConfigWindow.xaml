@@ -13,11 +13,11 @@
 
         <TextBlock FontSize="18" FontWeight="SemiBold" Text="Spotify Now Playing Screensaver"/>
         <TextBlock Grid.Row="1" Margin="0,8,0,12" TextWrapping="Wrap"
-                   Text="1) Klik Login. 2) Log in via je browser. 3) Sluit dit venster. Daarna werkt /s fullscreen."/>
+                   Text="1) Click Login. 2) Login via your browser. 3) Close this window. Then /s fullscreen works."/>
 
         <StackPanel Grid.Row="2" Orientation="Vertical" VerticalAlignment="Top" >
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <Button x:Name="LoginBtn" Width="140" Height="34" Margin="0,0,10,0" Click="Login_Click">Login met Spotify</Button>
+                <Button x:Name="LoginBtn" Width="140" Height="34" Margin="0,0,10,0" Click="Login_Click">Login with Spotify</Button>
                 <Button x:Name="TestBtn" Width="140" Height="34" Click="Test_Click">Test Now Playing</Button>
                 <Button x:Name="ClearBtn" Width="140" Height="34" Margin="10,0,0,0" Click="Clear_Click">Logout / Clear</Button>
             </StackPanel>
@@ -28,6 +28,6 @@
         </StackPanel>
 
         <TextBlock Grid.Row="3" Margin="0,12,0,0" Opacity="0.8" TextWrapping="Wrap"
-                   Text="Tip: Spotify moet ergens afspelen (pc/telefoon/speaker). Als je niets hoort: API geeft vaak 204 No Content."/>
+                   Text="Tip: Spotify must be playing somewhere (PC/phone/speaker). If you hear nothing: API often returns 204 No Content."/>
     </Grid>
 </Window>

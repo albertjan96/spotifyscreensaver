@@ -16,7 +16,7 @@ public partial class ConfigWindow : Window
         InitializeComponent();
         Append("Ready.");
         if (AppConfig.SpotifyClientId.Contains("PASTE_"))
-            Append("⚠️ Zet eerst je Client ID in AppConfig.cs");
+            Append("⚠️ First set your Client ID in AppConfig.cs");
     }
 
     private async void Login_Click(object sender, RoutedEventArgs e)
