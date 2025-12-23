@@ -16,8 +16,7 @@ namespace SpotifyScreenSaver;
 
 public partial class ScreenSaverWindow : Window
 {
-    private readonly SpotifyAuth _auth =
-        new(AppConfig.SpotifyClientId, AppConfig.RedirectUri, AppConfig.ListenerPrefix);
+    private SpotifyAuth? _auth;
 
     private readonly SpotifyApi _api = new();
 
@@ -55,7 +54,18 @@ public partial class ScreenSaverWindow : Window
             PlaceOnPrimaryScreen();
             CreateBlackoutsOnSecondaryScreens();
 
+            var clientId = AppConfig.LoadClientId();
+            if (string.IsNullOrWhiteSpace(clientId))
+            {
+                SongText.Text = "Not configured";
+                ArtistText.Text = "Run screensaver config (/c) to set Client ID.";
+                AlbumArt.Source = null;
+                return;
+            }
+            
+            _auth = new SpotifyAuth(clientId, AppConfig.RedirectUri, AppConfig.ListenerPrefix);
             _tokens = _auth.LoadTokens();
+            
             if (_tokens is null)
             {
                 SongText.Text = "Not logged in";
@@ -202,7 +212,7 @@ public partial class ScreenSaverWindow : Window
 
     private async Task TickAsync()
     {
-        if (_tokens is null || _isTickRunning) return;
+        if (_tokens is null || _isTickRunning || _auth is null) return;
 
         _isTickRunning = true;
         

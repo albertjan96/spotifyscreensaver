@@ -8,19 +8,55 @@ namespace SpotifyScreenSaver;
 
 public partial class ConfigWindow : Window
 {
-    private readonly SpotifyAuth _auth = new(AppConfig.SpotifyClientId, AppConfig.RedirectUri, AppConfig.ListenerPrefix);
+    private SpotifyAuth? _auth;
     private readonly SpotifyApi _api = new();
 
     public ConfigWindow()
     {
         InitializeComponent();
-        Append("Ready.");
-        if (AppConfig.SpotifyClientId.Contains("PASTE_"))
-            Append("⚠️ First set your Client ID in AppConfig.cs");
+        
+        var clientId = AppConfig.LoadClientId();
+        if (!string.IsNullOrWhiteSpace(clientId))
+        {
+            ClientIdBox.Text = clientId;
+            _auth = new SpotifyAuth(clientId, AppConfig.RedirectUri, AppConfig.ListenerPrefix);
+            Append("Ready. Client ID loaded.");
+        }
+        else
+        {
+            Append("⚠️ Please enter your Spotify Client ID and click Save.");
+            LoginBtn.IsEnabled = false;
+            TestBtn.IsEnabled = false;
+        }
+    }
+
+    private void SaveClientId_Click(object sender, RoutedEventArgs e)
+    {
+        var clientId = ClientIdBox.Text.Trim();
+        
+        if (string.IsNullOrWhiteSpace(clientId))
+        {
+            Append("❌ Client ID cannot be empty.");
+            return;
+        }
+        
+        AppConfig.SaveClientId(clientId);
+        _auth = new SpotifyAuth(clientId, AppConfig.RedirectUri, AppConfig.ListenerPrefix);
+        
+        LoginBtn.IsEnabled = true;
+        TestBtn.IsEnabled = true;
+        
+        Append("✅ Client ID saved successfully.");
     }
 
     private async void Login_Click(object sender, RoutedEventArgs e)
     {
+        if (_auth == null)
+        {
+            Append("❌ Please save Client ID first.");
+            return;
+        }
+        
         try
         {
             LoginBtn.IsEnabled = false;
@@ -43,6 +79,12 @@ public partial class ConfigWindow : Window
 
     private async void Test_Click(object sender, RoutedEventArgs e)
     {
+        if (_auth == null)
+        {
+            Append("❌ Please save Client ID first.");
+            return;
+        }
+        
         try
         {
             TestBtn.IsEnabled = false;
@@ -88,6 +130,12 @@ public partial class ConfigWindow : Window
 
     private void Clear_Click(object sender, RoutedEventArgs e)
     {
+        if (_auth == null)
+        {
+            Append("❌ Please save Client ID first.");
+            return;
+        }
+        
         _auth.ClearTokens();
         Append("🧹 Cleared stored tokens.");
     }

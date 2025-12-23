@@ -23,6 +23,10 @@
     <Resource Include="Resources\**\*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include=".github\workflows\release.yml" />
+  </ItemGroup>
+
   <!-- Debug Configuration -->
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugSymbols>true</DebugSymbols>
